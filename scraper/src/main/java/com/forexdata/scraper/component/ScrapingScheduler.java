@@ -14,7 +14,7 @@ public class ScrapingScheduler {
     @Autowired
     private ScrapingService scrapingService;
 
-    @Scheduled(cron = "0 0 * * * *") // Runs every hour
+    @Scheduled(cron = "0 0 0 * * *") // Runs every day
     public void scrapeForexData() {
         List<String> periods = List.of("1W", "1M", "3M", "6M", "1Y");
         List<String> currencyPairs = List.of("GBPINR=X", "AEDINR=X");
