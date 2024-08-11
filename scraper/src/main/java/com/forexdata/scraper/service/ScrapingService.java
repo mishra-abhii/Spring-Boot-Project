@@ -36,7 +36,7 @@ public class ScrapingService {
                 for (Element row : rows.subList(1, rows.size())) { // Skip header row
                     Elements cols = row.select("td");
                     if (cols.size() == 7) {
-                        String date = DateUtils.convertDateFormat(cols.getFirst().text());
+                        String date = DateUtils.convertDateFormat(cols.get(0).text());
                         // Check if the record already exist in DB or not
                         List<ForexData> existingData = forexDataRepository.findByDateAndFromCurrencyAndToCurrency(date, fromCurrency, toCurrency);
 
