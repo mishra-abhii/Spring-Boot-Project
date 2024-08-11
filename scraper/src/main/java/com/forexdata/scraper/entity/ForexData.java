@@ -26,7 +26,6 @@ public class ForexData {
     private String volume;
 
     // Getters and Setters
-
     public Long getId() {
         return id;
     }
@@ -43,20 +42,20 @@ public class ForexData {
         this.date = date;
     }
 
-    public String getFromCurrency(String substring) {
-        return fromCurrency;
-    }
-
     public void setFromCurrency(String fromCurrency) {
         this.fromCurrency = fromCurrency;
     }
 
-    public String getToCurrency(String substring) {
-        return toCurrency;
+    public String getFromCurrency() {
+        return fromCurrency;
     }
 
     public void setToCurrency(String toCurrency) {
         this.toCurrency = toCurrency;
+    }
+
+    public String getToCurrency() {
+        return toCurrency;
     }
 
     public String getOpen() {

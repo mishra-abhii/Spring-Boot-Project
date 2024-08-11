@@ -21,7 +21,7 @@ public class ForexDataController {
         this.forexDataRepository = forexDataRepository;
     }
 
-    @PostMapping("/forex-data")
+    @GetMapping("/forex-data")
     public List<ForexData> getForexData(@RequestParam String from, @RequestParam String to, @RequestParam String period) {
         // Convert period to timestamps
         long[] timestamps = getTimestampsForPeriod(period);

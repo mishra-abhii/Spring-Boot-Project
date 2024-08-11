@@ -30,8 +30,8 @@ public class ScrapingService {
                     Elements cols = row.select("td");
                     if (cols.size() == 7) {
                         ForexData data = new ForexData();
-                        data.setFromCurrency(quote.substring(0,3));
-                        data.setToCurrency(quote.substring(3,6));
+                        data.setFromCurrency(quote.substring(0, 3));
+                        data.setToCurrency(quote.substring(3, 6));
                         data.setDate(cols.get(0).text());
                         data.setOpen(cols.get(1).text());
                         data.setHigh(cols.get(2).text());
