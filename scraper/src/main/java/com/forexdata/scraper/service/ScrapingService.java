@@ -2,6 +2,7 @@ package com.forexdata.scraper.service;
 
 import com.forexdata.scraper.entity.ForexData;
 import com.forexdata.scraper.repository.ForexDataRepository;
+import com.forexdata.scraper.utility.DateUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +22,7 @@ public class ScrapingService {
     @Autowired
     private ForexDataRepository forexDataRepository;
 
-    public List<ForexData> scrapeData(String quote, long fromDate, long toDate) {
+    public void scrapeData(String quote, long fromDate, long toDate) {
         String encodedQuote = quote.substring(0,6) + "%3DX";
         String url = String.format("https://finance.yahoo.com/quote/%s/history/?period1=%d&period2=%d",
                 encodedQuote, fromDate, toDate);
@@ -38,9 +40,10 @@ public class ScrapingService {
                 for (Element row : rows.subList(1, rows.size())) { // Skip header row
                     Elements cols = row.select("td");
                     if (cols.size() == 7) {
+                        String date = DateUtils.convertDateFormat(cols.get(0).text());
                         // Check if the record already exist in DB or not
                         Optional<ForexData> existingData = forexDataRepository.findByDateAndFromCurrencyAndToCurrency(
-                                cols.getFirst().text(), fromCurrency, toCurrency);
+                                date, fromCurrency, toCurrency);
 
                         if(existingData.isPresent()){
                             updateAndSaveForexData(existingData, cols);
@@ -49,7 +52,8 @@ public class ScrapingService {
                             ForexData data = new ForexData();
                             data.setFromCurrency(fromCurrency);
                             data.setToCurrency(toCurrency);
-                            data.setDate(cols.get(0).text());
+//                            data.setDate(cols.get(0).text());
+                            data.setDate(date);
                             data.setOpen(cols.get(1).text());
                             data.setHigh(cols.get(2).text());
                             data.setLow(cols.get(3).text());
@@ -66,8 +70,10 @@ public class ScrapingService {
 
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
         }
-        return dataList;
+        return;
     }
 
     public void updateAndSaveForexData(Optional<ForexData> existingData, Elements cols) {

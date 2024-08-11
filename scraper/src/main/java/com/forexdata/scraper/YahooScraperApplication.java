@@ -9,5 +9,4 @@ public class YahooScraperApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(YahooScraperApplication.class, args);
 	}
-
 }

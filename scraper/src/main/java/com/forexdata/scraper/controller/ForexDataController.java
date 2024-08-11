@@ -19,19 +19,20 @@ public class ForexDataController {
     @Autowired
     private ForexDataRepository forexDataRepository;
 
-    @GetMapping("/forex-data")
+    @PostMapping("/forex-data")
     public List<ForexData> getForexData(@RequestParam String from, @RequestParam String to, @RequestParam String period) {
-        // Convert period to timestamps
+        // Convert period to Unix timestamps
         long[] timestamps = DateUtils.getTimestampsForPeriod(period);
-        List<ForexData> data = scrapingService.scrapeData(from + to + "=X", timestamps[0], timestamps[1]);
-        forexDataRepository.saveAll(data);
-        return forexDataRepository.findAll();
-    }
+        // Scrape data for given period.
+        scrapingService.scrapeData(from + to + "=X", timestamps[0], timestamps[1]);
 
-    @GetMapping("/scrape-data")
-    public List<ForexData> scrapeForexData(@RequestParam String from, @RequestParam String to, @RequestParam String period) {
-        long[] timestamps = DateUtils.getTimestampsForPeriod(period);
-        return scrapingService.scrapeData(from + to + "=X", timestamps[0], timestamps[1]);
+        // Get startDate and endDate using timestamp to query in DB
+        String startDate = DateUtils.getDateFromUnixTimestamp(timestamps[0]);
+        String endDate = DateUtils.getDateFromUnixTimestamp(timestamps[1]);
+        // Fetch scraped data from DB and store in list to return.
+        List<ForexData> queryData = forexDataRepository.
+                findByDateBetweenAndFromCurrencyAndToCurrency(startDate, endDate, from, to);
+        return queryData;
     }
 
     @GetMapping("/fetchAllDataFromDB")
