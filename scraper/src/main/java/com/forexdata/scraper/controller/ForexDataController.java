@@ -35,7 +35,7 @@ public class ForexDataController {
         return queryData;
     }
 
-    @GetMapping("/fetchAllDataFromDB")
+    @GetMapping("/fetch-all-data")
     public List<ForexData> getAllForexData() {
         if(forexDataRepository.count() > 0) return forexDataRepository.findAll();
         return new ArrayList<ForexData>();
