@@ -142,11 +142,8 @@ Once you have cloned the repository, you need to build the project using Maven. 
   
 ---
 
-## Thanks for Using This Project!
-
-If you found this project helpful, feel free to give it a star ⭐ on GitHub. 
+## Thanks!
 
 For any questions or feedback, please don't hesitate to reach out!
-
 Happy coding! 😊
 
